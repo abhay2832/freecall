@@ -3,173 +3,347 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stealth Temp SMS - Pro Edition</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <title>Call Free</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://sdk.twilio.com/js/client/v1.14/twilio.min.js"></script>
+
     <style>
         :root {
-            --primary: #3b82f6; --bg: #0f172a; --card: #1e293b;
-            --text: #f8fafc; --text-dim: #94a3b8; --border: #334155;
+            --primary: #007bff;
+            --bg-light: #f4f7f6;
+            --text-dark: #333;
+            --danger: #ff3b30;
+            --call-bg: #1c1c1e;
+            --call-text: #ffffff;
         }
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
-        body { background-color: var(--bg); color: var(--text); line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
-        
-        header { text-align: center; padding: 40px 0; border-bottom: 1px solid var(--border); margin-bottom: 30px; }
-        .logo { font-size: 32px; font-weight: 700; color: var(--primary); letter-spacing: -1px; }
-        
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
-        .card { 
-            background: var(--card); border: 1px solid var(--border); padding: 25px; 
-            border-radius: 16px; cursor: pointer; transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
         }
-        .card:hover { transform: translateY(-5px); border-color: var(--primary); box-shadow: 0 10px 25px -5px rgba(59, 130, 246, 0.2); }
-        .card h3 { font-size: 14px; color: var(--text-dim); text-transform: uppercase; margin-bottom: 10px; }
-        .card p { font-size: 22px; font-weight: 600; }
 
-        .inbox { display: none; background: var(--card); padding: 30px; border-radius: 20px; border: 1px solid var(--border); animation: slideIn 0.4s ease; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .btn-back { background: transparent; color: var(--primary); border: 1px solid var(--primary); padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-bottom: 20px; font-weight: 600; }
-        .btn-back:hover { background: var(--primary); color: white; }
+        body {
+            background-color: var(--bg-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+        }
 
-        .loader { text-align: center; padding: 40px; display: none; }
-        .spinner { width: 40px; height: 40px; border: 4px solid rgba(255,255,255,0.1); border-top-color: var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 15px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
+        /* App Container */
+        .screen {
+            width: 100%;
+            max-width: 400px;
+            height: 100vh;
+            max-height: 800px;
+            background: #fff;
+            display: none;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
 
-        .msg { background: rgba(255,255,255,0.03); padding: 20px; border-radius: 12px; margin-bottom: 15px; border-left: 4px solid var(--primary); }
-        .msg-meta { display: flex; justify-content: space-between; font-size: 13px; margin-bottom: 8px; font-weight: 600; color: var(--primary); }
-        .msg-body { font-size: 15px; color: var(--text); }
-        
-        .error-box { 
-            background: rgba(239, 68, 68, 0.1); border: 1px dashed #ef4444; 
-            color: #fca5a5; padding: 20px; border-radius: 12px; text-align: center; 
+        .screen.active {
+            display: flex;
+        }
+
+        /* Dialer Screen */
+        #dialer-screen {
+            padding: 40px 20px;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .header h1 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+        }
+
+        .input-group {
+            width: 100%;
+            margin-bottom: 30px;
+        }
+
+        select, input {
+            width: 100%;
+            padding: 15px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 18px;
+            background-color: #34c759;
+            color: white;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .btn-primary:hover {
+            background-color: #2da94c;
+        }
+
+        /* Call Screen */
+        #call-screen {
+            background-color: var(--call-bg);
+            color: var(--call-text);
+            padding: 60px 20px;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .call-info {
+            text-align: center;
+            margin-top: 40px;
+        }
+
+        #display-number {
+            font-size: 2rem;
+            font-weight: 300;
+            margin-bottom: 10px;
+        }
+
+        #call-status {
+            font-size: 1.2rem;
+            color: #a1a1a6;
+            margin-bottom: 5px;
+        }
+
+        #call-timer {
+            font-size: 1.2rem;
+            display: none;
+        }
+
+        .call-controls {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .control-btn {
+            background: rgba(255, 255, 255, 0.15);
+            border: none;
+            color: white;
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            font-size: 1.5rem;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: 0.3s;
+        }
+
+        .control-btn span {
+            font-size: 0.7rem;
+            margin-top: 5px;
+        }
+
+        .control-btn.active {
+            background: #fff;
+            color: var(--call-bg);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            color: white;
+            border: none;
+            width: 75px;
+            height: 75px;
+            border-radius: 50%;
+            font-size: 2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+            transition: 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #cc2f26;
+        }
+
+        /* Desktop view styling */
+        @media (min-width: 401px) {
+            .screen {
+                border-radius: 30px;
+                height: 800px;
+            }
         }
     </style>
 </head>
 <body>
 
-<div class="container">
-    <header>
-        <div class="logo">🚀 Stealth SMS Pro</div>
-        <p style="color: var(--text-dim)">Advanced Multi-Proxy Live SMS Scraper</p>
-    </header>
+    <div id="dialer-screen" class="screen active">
+        <div class="header">
+            <h1>Call Free</h1>
+            <p>Make international calls from your browser</p>
+        </div>
+        
+        <div class="input-group">
+            <select id="country-code">
+                <option value="+91">🇮🇳 India (+91)</option>
+                <option value="+1">🇺🇸 USA (+1)</option>
+                <option value="+92">🇵🇰 Pakistan (+92)</option>
+                <option value="+977">🇳🇵 Nepal (+977)</option>
+                <option value="+81">🇯🇵 Japan (+81)</option>
+                <option value="+975">🇧🇹 Bhutan (+975)</option>
+                <option value="+44">🇬🇧 UK (+44)</option>
+                <option value="+61">🇦🇺 Australia (+61)</option>
+                <option value="+1">🇨🇦 Canada (+1)</option>
+                <option value="+49">🇩🇪 Germany (+49)</option>
+            </select>
+            <input type="tel" id="phone-number" placeholder="Enter phone number" autocomplete="off">
+        </div>
 
-    <div id="mainGrid" class="grid">
-        <div class="card" onclick="openInbox('+91 91234 56789', '919123456789')">
-            <h3>🇮🇳 India</h3>
-            <p>+91 91234 56789</p>
-        </div>
-        <div class="card" onclick="openInbox('+92 300 1234567', '923001234567')">
-            <h3>🇵🇰 Pakistan</h3>
-            <p>+92 300 1234567</p>
-        </div>
-        <div class="card" onclick="openInbox('+1 201 500 0111', '12015000111')">
-            <h3>🇺🇸 USA</h3>
-            <p>+1 201 500 0111</p>
-        </div>
+        <button id="call-btn" class="btn-primary">
+            <i class="fa-solid fa-phone"></i> Call
+        </button>
     </div>
 
-    <div id="inboxView" class="inbox">
-        <button class="btn-back" onclick="showMain()">← Back to Numbers</button>
-        <h2 id="activeNum" style="margin-bottom: 25px;"></h2>
-        
-        <div id="loader" class="loader">
-            <div class="spinner"></div>
-            <p id="status">Connecting to Secure Tunnel...</p>
+    <div id="call-screen" class="screen">
+        <div class="call-info">
+            <div id="display-number">+1 234 567 8900</div>
+            <div id="call-status">Calling...</div>
+            <div id="call-timer">00:00</div>
         </div>
 
-        <div id="messageList"></div>
+        <div class="call-controls">
+            <button id="mute-btn" class="control-btn">
+                <i class="fa-solid fa-microphone"></i>
+                <span>Mute</span>
+            </button>
+            <button id="speaker-btn" class="control-btn">
+                <i class="fa-solid fa-volume-high"></i>
+                <span>Speaker</span>
+            </button>
+        </div>
+
+        <button id="end-call-btn" class="btn-danger">
+            <i class="fa-solid fa-phone-slash"></i>
+        </button>
     </div>
-</div>
 
-<script>
-    const proxies = [
-        (url) => `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&t=${Date.now()}`,
-        (url) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
-        (url) => `https://thingproxy.freeboard.io/fetch/${url}`
-    ];
+    <script>
+        // DOM Elements
+        const dialerScreen = document.getElementById('dialer-screen');
+        const callScreen = document.getElementById('call-screen');
+        const countryCode = document.getElementById('country-code');
+        const phoneNumber = document.getElementById('phone-number');
+        const callBtn = document.getElementById('call-btn');
 
-    function showMain() {
-        document.getElementById('inboxView').style.display = 'none';
-        document.getElementById('mainGrid').style.display = 'grid';
-    }
+        const displayNumber = document.getElementById('display-number');
+        const callStatus = document.getElementById('call-status');
+        const callTimer = document.getElementById('call-timer');
+        const muteBtn = document.getElementById('mute-btn');
+        const speakerBtn = document.getElementById('speaker-btn');
+        const endCallBtn = document.getElementById('end-call-btn');
 
-    async function openInbox(displayNum, cleanNum) {
-        document.getElementById('mainGrid').style.display = 'none';
-        const inbox = document.getElementById('inboxView');
-        inbox.style.display = 'block';
-        document.getElementById('activeNum').innerText = "Inbox: " + displayNum;
-        
-        await fetchSMS(cleanNum);
-    }
+        // State variables
+        let timerInterval;
+        let seconds = 0;
+        let isMuted = false;
+        let isSpeakerOn = false;
 
-    async function fetchSMS(id) {
-        const list = document.getElementById('messageList');
-        const loader = document.getElementById('loader');
-        const status = document.getElementById('status');
-        
-        list.innerHTML = '';
-        loader.style.display = 'block';
-
-        const target = `https://receive-smss.com/sms/${id}/`;
-        let success = false;
-
-        // Multi-Proxy Attempt Logic
-        for (let i = 0; i < proxies.length; i++) {
-            try {
-                status.innerText = `Trying Proxy Route ${i + 1}...`;
-                const response = await fetch(proxies[i](target));
-                
-                if (!response.ok) throw new Error();
-
-                let html;
-                if (i === 0) { // AllOrigins returns JSON
-                    const data = await response.json();
-                    html = data.contents;
-                } else {
-                    html = await response.text();
-                }
-
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(html, "text/html");
-                const rows = doc.querySelectorAll('.message-row');
-
-                if (rows.length > 0) {
-                    loader.style.display = 'none';
-                    rows.forEach(row => {
-                        const sender = row.querySelector('.sender-column')?.innerText.trim() || "Unknown";
-                        const text = row.querySelector('.message-text-column')?.innerText.trim() || "No content";
-                        const time = row.querySelector('.time-column')?.innerText.trim() || "Recent";
-
-                        list.innerHTML += `
-                            <div class="msg">
-                                <div class="msg-meta"><span>${sender}</span><span>${time}</span></div>
-                                <div class="msg-body">${text}</div>
-                            </div>
-                        `;
-                    });
-                    success = true;
-                    break; 
-                }
-            } catch (e) {
-                console.log(`Route ${i+1} blocked.`);
+        // UI EVENT LISTENERS
+        callBtn.addEventListener('click', () => {
+            const number = phoneNumber.value.trim();
+            if (!number) {
+                alert("Please enter a phone number.");
+                return;
             }
+            const fullNumber = countryCode.value + " " + number;
+            startUI_Call(fullNumber);
+        });
+
+        endCallBtn.addEventListener('click', () => {
+            endUI_Call();
+        });
+
+        muteBtn.addEventListener('click', () => {
+            isMuted = !isMuted;
+            muteBtn.classList.toggle('active');
+        });
+
+        speakerBtn.addEventListener('click', () => {
+            isSpeakerOn = !isSpeakerOn;
+            speakerBtn.classList.toggle('active');
+        });
+
+        // UI LOGIC FUNCTIONS
+        function startUI_Call(number) {
+            // Switch screens
+            dialerScreen.classList.remove('active');
+            callScreen.classList.add('active');
+            
+            // Reset UI
+            displayNumber.textContent = number;
+            callStatus.textContent = "Calling...";
+            callTimer.style.display = "none";
+            muteBtn.classList.remove('active');
+            speakerBtn.classList.remove('active');
+            seconds = 0;
+
+            // Simulate connection after 2 seconds
+            setTimeout(() => {
+                callStatus.textContent = "Connected";
+                callTimer.style.display = "block";
+                startTimer();
+            }, 2000); 
         }
 
-        if (!success) {
-            loader.style.display = 'none';
-            list.innerHTML = `
-                <div class="error-box">
-                    <h3>🛑 Security Bypass Failed</h3>
-                    <p style="margin-top:10px; font-size:14px;">
-                        Target site detected the proxy. Is problem ko hamesha ke liye theek karne ke liye **Backend Server (Node.js)** zaroori hai.
-                    </p>
-                    <button class="btn-back" style="margin-top:15px;" onclick="location.reload()">Try Again</button>
-                </div>
-            `;
+        function endUI_Call() {
+            clearInterval(timerInterval);
+            callStatus.textContent = "Call Ended";
+            
+            setTimeout(() => {
+                callScreen.classList.remove('active');
+                dialerScreen.classList.add('active');
+                phoneNumber.value = ''; // clear input
+            }, 1500);
         }
-    }
-</script>
 
+        function startTimer() {
+            clearInterval(timerInterval);
+            callTimer.textContent = "00:00";
+            timerInterval = setInterval(() => {
+                seconds++;
+                const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+                const secs = String(seconds % 60).padStart(2, '0');
+                callTimer.textContent = `${mins}:${secs}`;
+            }, 1000);
+        }
+    </script>
 </body>
 </html>
