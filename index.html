@@ -3,347 +3,373 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Call Free</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <script src="https://sdk.twilio.com/js/client/v1.14/twilio.min.js"></script>
-
+    <title>FreeCall - One Page P2P Calling</title>
+    <script src="https://unpkg.com/peerjs@1.5.2/dist/peerjs.min.js"></script>
     <style>
-        :root {
-            --primary: #007bff;
-            --bg-light: #f4f7f6;
-            --text-dark: #333;
-            --danger: #ff3b30;
-            --call-bg: #1c1c1e;
-            --call-text: #ffffff;
-        }
-
         * {
-            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            box-sizing: border-box;
         }
 
         body {
-            background-color: var(--bg-light);
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            overflow: hidden;
+            color: #333;
         }
 
-        /* App Container */
-        .screen {
-            width: 100%;
-            max-width: 400px;
-            height: 100vh;
-            max-height: 800px;
-            background: #fff;
-            display: none;
-            flex-direction: column;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-        }
-
-        .screen.active {
-            display: flex;
-        }
-
-        /* Dialer Screen */
-        #dialer-screen {
-            padding: 40px 20px;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .header {
+        .container {
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 25px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2);
             text-align: center;
-            margin-bottom: 40px;
         }
 
-        .header h1 {
-            color: var(--primary);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-        }
-
-        .input-group {
-            width: 100%;
+        .logo {
             margin-bottom: 30px;
         }
 
-        select, input {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            font-size: 1.1rem;
-            outline: none;
-        }
-
-        select:focus, input:focus {
-            border-color: var(--primary);
-        }
-
-        .btn-primary {
-            width: 100%;
-            padding: 18px;
-            background-color: #34c759;
-            color: white;
-            border: none;
-            border-radius: 50px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .btn-primary:hover {
-            background-color: #2da94c;
-        }
-
-        /* Call Screen */
-        #call-screen {
-            background-color: var(--call-bg);
-            color: var(--call-text);
-            padding: 60px 20px;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .call-info {
-            text-align: center;
-            margin-top: 40px;
-        }
-
-        #display-number {
-            font-size: 2rem;
-            font-weight: 300;
+        .logo h1 {
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
             margin-bottom: 10px;
         }
 
-        #call-status {
-            font-size: 1.2rem;
-            color: #a1a1a6;
-            margin-bottom: 5px;
+        .input-group {
+            margin-bottom: 20px;
         }
 
-        #call-timer {
-            font-size: 1.2rem;
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 15px;
+            font-size: 16px;
+            margin-bottom: 15px;
+            transition: all 0.3s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102,126,234,0.1);
+        }
+
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 5px 0;
+        }
+
+        .btn-primary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(102,126,234,0.4);
+        }
+
+        .btn-success { background: #28a745; color: white; }
+        .btn-danger { background: #dc3545; color: white; }
+        .btn-secondary { 
+            background: #f8f9fa; 
+            color: #495057; 
+            border: 2px solid #e9ecef;
+        }
+
+        .call-section {
             display: none;
+            margin-top: 20px;
+        }
+
+        .call-section.active {
+            display: block;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .peer-id {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+            font-family: monospace;
+            font-size: 14px;
+            word-break: break-all;
+            border: 2px solid #e9ecef;
+        }
+
+        .video-container {
+            position: relative;
+            height: 250px;
+            background: #000;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 20px 0;
+        }
+
+        #localVideo {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            width: 120px;
+            height: 90px;
+            border-radius: 10px;
+            border: 3px solid rgba(255,255,255,0.8);
+            z-index: 2;
+        }
+
+        #remoteVideo {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
 
         .call-controls {
             display: flex;
-            gap: 30px;
-            margin-bottom: 40px;
-        }
-
-        .control-btn {
-            background: rgba(255, 255, 255, 0.15);
-            border: none;
-            color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            gap: 12px;
             justify-content: center;
-            transition: 0.3s;
+            flex-wrap: wrap;
         }
 
-        .control-btn span {
-            font-size: 0.7rem;
-            margin-top: 5px;
+        .call-controls button {
+            width: auto;
+            padding: 12px 20px;
+            font-size: 14px;
         }
 
-        .control-btn.active {
-            background: #fff;
-            color: var(--call-bg);
+        .status {
+            padding: 12px;
+            border-radius: 10px;
+            margin: 15px 0;
+            font-weight: 500;
         }
 
-        .btn-danger {
-            background-color: var(--danger);
-            color: white;
-            border: none;
-            width: 75px;
-            height: 75px;
-            border-radius: 50%;
-            font-size: 2rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin-bottom: 40px;
-            transition: 0.3s;
-        }
+        .status.connecting { background: #fff3cd; color: #856404; }
+        .status.connected { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
 
-        .btn-danger:hover {
-            background-color: #cc2f26;
-        }
-
-        /* Desktop view styling */
-        @media (min-width: 401px) {
-            .screen {
-                border-radius: 30px;
-                height: 800px;
-            }
+        @media (max-width: 480px) {
+            .container { padding: 20px; margin: 10px; }
+            .logo h1 { font-size: 2em; }
+            #localVideo { width: 100px; height: 75px; }
         }
     </style>
 </head>
 <body>
-
-    <div id="dialer-screen" class="screen active">
-        <div class="header">
-            <h1>Call Free</h1>
-            <p>Make international calls from your browser</p>
-        </div>
-        
-        <div class="input-group">
-            <select id="country-code">
-                <option value="+91">🇮🇳 India (+91)</option>
-                <option value="+1">🇺🇸 USA (+1)</option>
-                <option value="+92">🇵🇰 Pakistan (+92)</option>
-                <option value="+977">🇳🇵 Nepal (+977)</option>
-                <option value="+81">🇯🇵 Japan (+81)</option>
-                <option value="+975">🇧🇹 Bhutan (+975)</option>
-                <option value="+44">🇬🇧 UK (+44)</option>
-                <option value="+61">🇦🇺 Australia (+61)</option>
-                <option value="+1">🇨🇦 Canada (+1)</option>
-                <option value="+49">🇩🇪 Germany (+49)</option>
-            </select>
-            <input type="tel" id="phone-number" placeholder="Enter phone number" autocomplete="off">
+    <div class="container">
+        <div class="logo">
+            <h1>📞 FreeCall</h1>
+            <p>Share Peer ID to call anyone!</p>
         </div>
 
-        <button id="call-btn" class="btn-primary">
-            <i class="fa-solid fa-phone"></i> Call
-        </button>
-    </div>
-
-    <div id="call-screen" class="screen">
-        <div class="call-info">
-            <div id="display-number">+1 234 567 8900</div>
-            <div id="call-status">Calling...</div>
-            <div id="call-timer">00:00</div>
+        <!-- Main Interface -->
+        <div id="mainScreen">
+            <div class="input-group">
+                <input type="text" id="peerIdInput" placeholder="Enter Peer ID to call">
+                <button class="btn-primary" onclick="connectCall()">📞 Connect Call</button>
+            </div>
+            
+            <div class="peer-id" id="myPeerId">Generating your Peer ID...</div>
+            
+            <div class="status connecting" id="status">Initializing peer connection...</div>
         </div>
 
-        <div class="call-controls">
-            <button id="mute-btn" class="control-btn">
-                <i class="fa-solid fa-microphone"></i>
-                <span>Mute</span>
-            </button>
-            <button id="speaker-btn" class="control-btn">
-                <i class="fa-solid fa-volume-high"></i>
-                <span>Speaker</span>
-            </button>
+        <!-- Call Interface -->
+        <div id="callScreen" class="call-section">
+            <div class="video-container">
+                <video id="localVideo" autoplay muted playsinline></video>
+                <video id="remoteVideo" autoplay playsinline></video>
+            </div>
+            
+            <div class="call-controls">
+                <button class="btn-success" id="muteBtn" onclick="toggleMute()">🔇 Mute</button>
+                <button class="btn-secondary" onclick="toggleVideo()">📹 Video</button>
+                <button class="btn-danger" onclick="endCall()">📴 End Call</button>
+            </div>
+            
+            <div class="status connected" id="callStatus">🟢 Connected - You can see and hear each other!</div>
         </div>
-
-        <button id="end-call-btn" class="btn-danger">
-            <i class="fa-solid fa-phone-slash"></i>
-        </button>
     </div>
 
     <script>
-        // DOM Elements
-        const dialerScreen = document.getElementById('dialer-screen');
-        const callScreen = document.getElementById('call-screen');
-        const countryCode = document.getElementById('country-code');
-        const phoneNumber = document.getElementById('phone-number');
-        const callBtn = document.getElementById('call-btn');
-
-        const displayNumber = document.getElementById('display-number');
-        const callStatus = document.getElementById('call-status');
-        const callTimer = document.getElementById('call-timer');
-        const muteBtn = document.getElementById('mute-btn');
-        const speakerBtn = document.getElementById('speaker-btn');
-        const endCallBtn = document.getElementById('end-call-btn');
-
-        // State variables
-        let timerInterval;
-        let seconds = 0;
+        // Global variables
+        let peer = null;
+        let currentCall = null;
+        let localStream = null;
         let isMuted = false;
-        let isSpeakerOn = false;
+        let isVideoOn = true;
 
-        // UI EVENT LISTENERS
-        callBtn.addEventListener('click', () => {
-            const number = phoneNumber.value.trim();
-            if (!number) {
-                alert("Please enter a phone number.");
+        // DOM elements
+        const mainScreen = document.getElementById('mainScreen');
+        const callScreen = document.getElementById('callScreen');
+        const peerIdInput = document.getElementById('peerIdInput');
+        const myPeerId = document.getElementById('myPeerId');
+        const status = document.getElementById('status');
+        const localVideo = document.getElementById('localVideo');
+        const remoteVideo = document.getElementById('remoteVideo');
+        const muteBtn = document.getElementById('muteBtn');
+        const callStatus = document.getElementById('callStatus');
+
+        // Initialize PeerJS
+        function initPeer() {
+            peer = new Peer({
+                config: {
+                    iceServers: [
+                        { urls: 'stun:stun.l.google.com:19302' },
+                        { urls: 'stun:stun1.l.google.com:19302' }
+                    ]
+                }
+            });
+
+            peer.on('open', (id) => {
+                myPeerId.textContent = id;
+                status.textContent = '✅ Ready! Share your Peer ID with friends.';
+                status.className = 'status connected';
+            });
+
+            peer.on('error', (err) => {
+                status.textContent = '❌ Connection error: ' + err.type;
+                status.className = 'status error';
+            });
+
+            // Handle incoming calls
+            peer.on('call', (call) => {
+                navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                }).then((stream) => {
+                    localStream = stream;
+                    localVideo.srcObject = stream;
+                    
+                    call.answer(stream);
+                    handleCall(call);
+                }).catch((err) => {
+                    alert('Please allow camera/microphone access');
+                });
+            });
+        }
+
+        // Connect to a call
+        async function connectCall() {
+            const peerId = peerIdInput.value.trim();
+            if (!peerId) {
+                alert('Enter a Peer ID to call');
                 return;
             }
-            const fullNumber = countryCode.value + " " + number;
-            startUI_Call(fullNumber);
-        });
 
-        endCallBtn.addEventListener('click', () => {
-            endUI_Call();
-        });
+            try {
+                status.textContent = '🔄 Getting camera & mic access...';
+                status.className = 'status connecting';
 
-        muteBtn.addEventListener('click', () => {
+                localStream = await navigator.mediaDevices.getUserMedia({
+                    video: true,
+                    audio: true
+                });
+
+                localVideo.srcObject = localStream;
+                currentCall = peer.call(peerId, localStream);
+
+                handleCall(currentCall);
+            } catch (err) {
+                status.textContent = '❌ Camera/mic access denied';
+                status.className = 'status error';
+            }
+        }
+
+        // Handle call connection
+        function handleCall(call) {
+            currentCall = call;
+
+            call.on('stream', (remoteStream) => {
+                remoteVideo.srcObject = remoteStream;
+                
+                mainScreen.style.display = 'none';
+                callScreen.classList.add('active');
+                status.textContent = '🟢 Connected - You can see and hear each other!';
+                callStatus.textContent = '🟢 Live call - High quality P2P connection';
+            });
+
+            call.on('close', endCall);
+            call.on('error', (err) => {
+                status.textContent = '❌ Call failed: ' + err;
+                status.className = 'status error';
+            });
+        }
+
+        // End current call
+        function endCall() {
+            if (currentCall) {
+                currentCall.close();
+            }
+            if (localStream) {
+                localStream.getTracks().forEach(track => track.stop());
+            }
+            
+            localVideo.srcObject = null;
+            remoteVideo.srcObject = null;
+            callScreen.classList.remove('active');
+            mainScreen.style.display = 'block';
+            status.textContent = '✅ Call ended';
+            status.className = 'status connected';
+        }
+
+        // Toggle mute
+        function toggleMute() {
+            const audioTrack = localStream.getAudioTracks()[0];
             isMuted = !isMuted;
-            muteBtn.classList.toggle('active');
+            audioTrack.enabled = !isMuted;
+            muteBtn.textContent = isMuted ? '🔊 Unmute' : '🔇 Mute';
+            muteBtn.className = isMuted ? 'btn-success' : 'btn-danger';
+        }
+
+        // Toggle video
+        function toggleVideo() {
+            const videoTrack = localStream.getVideoTracks()[0];
+            isVideoOn = !isVideoOn;
+            videoTrack.enabled = isVideoOn;
+        }
+
+        // Copy peer ID to clipboard
+        myPeerId.addEventListener('click', () => {
+            navigator.clipboard.writeText(myPeerId.textContent).then(() => {
+                const original = myPeerId.textContent;
+                myPeerId.textContent = '✅ Copied to clipboard!';
+                setTimeout(() => {
+                    myPeerId.textContent = original;
+                }, 2000);
+            });
         });
 
-        speakerBtn.addEventListener('click', () => {
-            isSpeakerOn = !isSpeakerOn;
-            speakerBtn.classList.toggle('active');
+        // Enter to connect
+        peerIdInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') connectCall();
         });
 
-        // UI LOGIC FUNCTIONS
-        function startUI_Call(number) {
-            // Switch screens
-            dialerScreen.classList.remove('active');
-            callScreen.classList.add('active');
-            
-            // Reset UI
-            displayNumber.textContent = number;
-            callStatus.textContent = "Calling...";
-            callTimer.style.display = "none";
-            muteBtn.classList.remove('active');
-            speakerBtn.classList.remove('active');
-            seconds = 0;
-
-            // Simulate connection after 2 seconds
-            setTimeout(() => {
-                callStatus.textContent = "Connected";
-                callTimer.style.display = "block";
-                startTimer();
-            }, 2000); 
-        }
-
-        function endUI_Call() {
-            clearInterval(timerInterval);
-            callStatus.textContent = "Call Ended";
-            
-            setTimeout(() => {
-                callScreen.classList.remove('active');
-                dialerScreen.classList.add('active');
-                phoneNumber.value = ''; // clear input
-            }, 1500);
-        }
-
-        function startTimer() {
-            clearInterval(timerInterval);
-            callTimer.textContent = "00:00";
-            timerInterval = setInterval(() => {
-                seconds++;
-                const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
-                const secs = String(seconds % 60).padStart(2, '0');
-                callTimer.textContent = `${mins}:${secs}`;
-            }, 1000);
-        }
+        // Initialize on page load
+        window.addEventListener('load', initPeer);
     </script>
 </body>
 </html>
