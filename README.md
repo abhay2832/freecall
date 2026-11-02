@@ -1,538 +1,478 @@
-📞 FreeCall — One Page Peer-to-Peer Video Calling
+📞 FreeCall — Simple Peer-to-Peer Video Calling
 
-<div align="center"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=25&pause=1000&color=667EEA&center=true&vCenter=true&width=650&lines=Welcome+to+FreeCall+%F0%9F%91%8B;Connect+with+Anyone%2C+Anywhere;Simple+%E2%80%A2+Fast+%E2%80%A2+Browser+Based;No+App+Installation+Required!" alt="Typing SVG" />🌐 Simple. Fast. Free. Connected.
+<div align="center"><img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&pause=1000&color=667EEA&center=true&vCenter=true&width=600&lines=Welcome+to+FreeCall;Connect+Anywhere%2C+Anytime;Simple+Browser-Based+Video+Calling" alt="FreeCall Animated Heading" />Connect with people. No complicated setup.
 
-A lightweight browser-based Peer-to-Peer video calling application that allows two people to connect directly using a unique Peer ID.
+A lightweight browser-based video calling application built with HTML, CSS, JavaScript and PeerJS.
 
-"🚀 Live Demo" (https://abhay2832.github.io/freecall/) • "📂 Source Code" (https://github.com/abhay2832/freecall)
+<br><img src="https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white" alt="HTML5" />
+<img src="https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white" alt="CSS3" />
+<img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black" alt="JavaScript" />
+<img src="https://img.shields.io/badge/PeerJS-WebRTC-blue?style=for-the-badge" alt="PeerJS" /><br><br>
 
-<br>"HTML5" (https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)
-"CSS3" (https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)
-"JavaScript" (https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)
-"PeerJS" (https://img.shields.io/badge/PeerJS-WebRTC-blue?style=for-the-badge)
-"GitHub Pages" (https://img.shields.io/badge/Hosted-GitHub%20Pages-222222?style=for-the-badge&logo=github)
+🌐 Live Project
 
-"Status" (https://img.shields.io/badge/Project-Active-brightgreen?style=flat-square)
-"Platform" (https://img.shields.io/badge/Platform-Web%20Browser-orange?style=flat-square)
-"License" (https://img.shields.io/badge/License-Not%20Specified-lightgrey?style=flat-square)
+https://abhay2832.github.io/freecall/
 
 </div>---
 
-📌 Table of Contents
+📖 About The Project
 
-- "About The Project" (#-about-the-project)
-- "Why I Built FreeCall" (#-why-i-built-freecall)
-- "Project Information" (#-project-information)
-- "Key Features" (#-key-features)
-- "How FreeCall Works" (#-how-freecall-works)
-- "Technology Stack" (#-technology-stack)
-- "Project Architecture" (#-project-architecture)
-- "How To Use FreeCall" (#-how-to-use-freecall)
-- "Run Locally" (#-run-locally)
-- "Browser Permissions" (#-browser-permissions)
-- "Privacy and Security" (#-privacy-and-security)
-- "Future Improvements" (#-future-improvements)
-- "Challenges and Learning" (#-challenges-and-learning)
-- "Developer" (#-developer)
-- "Contributing" (#-contributing)
-- "License" (#-license)
+FreeCall is a browser-based Peer-to-Peer (P2P) video calling application designed to make online communication simple and accessible.
 
----
+The project allows two people to connect through a unique Peer ID and communicate using their camera and microphone.
 
-🚀 About The Project
+The main idea is simple: open the website, share your Peer ID, enter another person's ID and start a video call.
 
-FreeCall is a simple, lightweight and browser-based Peer-to-Peer (P2P) video calling application.
+There is no separate application to install and no account registration system implemented in the current version.
 
-The main idea behind FreeCall is to make online communication easier by allowing people to connect with each other directly through a unique Peer ID.
+FreeCall uses PeerJS to simplify WebRTC communication between browsers.
 
-Unlike traditional video calling platforms that require users to create accounts, install applications or complete lengthy registration processes, FreeCall focuses on simplicity.
+🎯 Project Purpose
 
-Users simply:
+The purpose of FreeCall is to explore and demonstrate how real-time communication can be implemented using modern web technologies.
 
-1. Open the FreeCall website.
-2. Get their automatically generated Peer ID.
-3. Share their Peer ID with another person.
-4. Enter the other person's Peer ID.
-5. Click the Connect Call button.
-6. Start communicating through a video and audio connection.
+The project focuses on:
 
-The application uses PeerJS and WebRTC technology to establish real-time communication between browsers.
+- Making video calling simple.
+- Exploring Peer-to-Peer communication.
+- Understanding WebRTC technology.
+- Using browser camera and microphone APIs.
+- Learning real-time media streaming.
+- Creating an interactive and responsive interface.
+- Building a functional application using core web technologies.
 
-No separate desktop or mobile application installation is required.
+✨ Features
 
-<div align="center">💜 Connect Without Complications
+🆔 1. Automatic Peer ID Generation
 
-Your browser is your communication platform.
+When a user opens FreeCall, the application initializes PeerJS and generates a unique Peer ID.
 
-</div>---
+This ID identifies the user for incoming and outgoing calls.
 
-💡 Why I Built FreeCall
+📋 2. Copy Peer ID
 
-The internet has made communication easier, but many communication platforms still require account creation, application installation and unnecessary setup.
+Click the displayed Peer ID to copy it to the clipboard.
 
-I wanted to explore a different approach.
+The application displays a temporary confirmation after copying.
 
-The idea was to build a small web application where users could start a video call simply by sharing an ID.
+📞 3. Connect Call
 
-The main objectives were:
+Enter another person's Peer ID and click the Connect Call button.
 
-- Make video calling simple and accessible.
-- Understand Peer-to-Peer communication.
-- Explore WebRTC technology.
-- Learn how browsers handle camera and microphone streams.
-- Build an interactive interface using basic web technologies.
-- Create a project that works directly inside a browser.
-- Understand real-time connection handling and media controls.
+The application requests camera and microphone access before attempting to establish the call.
 
-FreeCall is also a practical learning project demonstrating how modern browser technologies can be used to build real-time communication applications.
+🎥 4. Live Video Calling
 
----
+Communicate through live video using the browser camera.
 
-✨ Key Features
+The interface displays both local and remote video streams.
 
-1. 🆔 Automatic Peer ID Generation
+🎙️ 5. Audio Communication
 
-Every user receives a unique Peer ID when opening the application.
+The application captures microphone audio and sends it through the WebRTC media connection.
 
-This ID is used to identify the user and establish a connection with another peer.
+🔇 6. Mute and Unmute
 
-There is no need to manually create an account or username.
+Control your microphone during an active call.
 
-2. 📋 One-Click Peer ID Copy
+- Mute disables the outgoing audio track.
+- Unmute enables the audio track again.
 
-Users can click their generated Peer ID to copy it to the clipboard.
+📹 7. Video Control
 
-They can then share it through messaging applications or any other communication platform.
+Enable or disable the outgoing camera video track during a call.
 
-3. 📞 Direct Calling System
+📴 8. End Call
 
-Enter another user's Peer ID and click the Connect Call button.
+End an active call whenever required.
 
-FreeCall attempts to establish a real-time connection with the selected peer.
+The application closes the call, stops local media tracks and clears the video elements.
 
-4. 🎥 Live Video Calling
+📱 9. Responsive Interface
 
-The application supports live video communication through the browser's camera.
+The layout includes mobile-specific CSS adjustments for smaller screens.
 
-Users can see the remote participant once the connection is established.
-
-5. 🎙️ Real-Time Audio Communication
-
-FreeCall captures microphone audio and sends the media stream through the peer connection.
-
-This enables two-way voice communication.
-
-6. 🔇 Mute and Unmute
-
-Users can control their microphone during an active call.
-
-- Mute: Temporarily disables outgoing microphone audio.
-- Unmute: Enables the microphone again.
-
-7. 📹 Video On/Off Control
-
-Users can enable or disable their outgoing camera video track during a call.
-
-This gives users more control over their video experience.
-
-8. 📴 End Call
-
-Users can end the current call whenever they want.
-
-The application closes the active connection, stops local media tracks and returns to the main screen.
-
-9. 🎨 Modern User Interface
+🎨 10. Modern Visual Design
 
 The interface includes:
 
-- Gradient background.
-- Glass-like translucent container.
+- Purple gradient background.
+- Translucent white container.
 - Rounded buttons and input fields.
-- Hover animations.
-- Smooth screen transitions.
-- Responsive layout.
-- Real-time connection status.
-
-10. 📱 Responsive Design
-
-The layout includes responsive CSS adjustments for smaller screens, making it suitable for mobile and desktop browsers.
+- Smooth hover transitions.
+- Animated call screen appearance.
+- Clean video display.
+- Connection status indicators.
 
 ---
 
-⚙️ How FreeCall Works
+⚙️ How Does It Work?
 
-FreeCall uses PeerJS to simplify browser-based WebRTC connections.
+FreeCall uses PeerJS and WebRTC to establish real-time communication between two browsers.
 
-Here is the basic working process:
+Connection Process
 
-flowchart TD
-    A["Open FreeCall Website"] --> B["Initialize PeerJS"]
-    B --> C["Generate Unique Peer ID"]
-    C --> D["Share Peer ID"]
-    D --> E["Other User Enters Peer ID"]
-    E --> F["Request Camera and Microphone"]
-    F --> G["Create Peer Connection"]
-    G --> H["Exchange Media Streams"]
-    H --> I["Live Video and Audio Call"]
-    I --> J["Mute / Video Controls"]
-    J --> K["End Call"]
-    K --> L["Stop Media Tracks"]
+       USER 1
+          |
+          v
+    Opens FreeCall
+          |
+          v
+    Peer ID Generated
+          |
+          v
+    Shares Peer ID
+          |
+          |
+          v
+       USER 2
+          |
+          v
+    Opens FreeCall
+          |
+          v
+    Enters User 1 ID
+          |
+          v
+    Requests Camera
+    and Microphone
+          |
+          v
+    PeerJS Call Setup
+          |
+          v
+    WebRTC Connection
+          |
+          v
+    Audio + Video
+          |
+          v
+     Live Communication
 
-🔍 Technical Working
+Technical Explanation
 
-Step 1 — Peer Initialization
+1. Peer Initialization
 
-When the website loads, the "initPeer()" function initializes a new PeerJS instance.
+The "initPeer()" function creates a PeerJS instance and initializes the peer connection.
 
-PeerJS generates a unique Peer ID.
+2. Peer ID Generation
 
-Step 2 — Peer ID Sharing
+The "peer.on('open')" event receives the generated Peer ID and displays it on the screen.
 
-The generated ID is displayed on the interface.
+3. Media Access
 
-Users can click the ID to copy it and share it with another person.
+The application uses:
 
-Step 3 — Camera and Microphone Access
+navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: true
+});
 
-When a user initiates or receives a call, the application requests permission through:
+This requests access to the camera and microphone.
 
-"navigator.mediaDevices.getUserMedia()"
+4. Starting a Call
 
-The browser asks the user for camera and microphone permission.
+The application uses:
 
-Step 4 — Establishing a Connection
+peer.call(peerId, localStream);
 
-The caller uses:
+This initiates an outgoing call to the specified Peer ID.
 
-"peer.call(peerId, localStream)"
+5. Handling Incoming Calls
 
-PeerJS handles the call setup and WebRTC signaling process.
+The application listens for incoming calls using:
 
-STUN servers are configured to help peers discover possible network connection paths.
+peer.on('call', (call) => {
+    // Handle incoming call
+});
 
-Step 5 — Receiving Remote Media
+6. Receiving Remote Video
 
-The application listens for the incoming media stream through:
+The remote media stream is received through:
 
-"call.on('stream', callback)"
+call.on('stream', (remoteStream) => {
+    remoteVideo.srcObject = remoteStream;
+});
 
-Once the remote stream is received, it is displayed inside the remote video element.
+7. Ending a Call
 
-Step 6 — Call Management
-
-The application provides functions to manage the active call:
-
-- "handleCall()" — Handles the call and incoming stream.
-- "toggleMute()" — Controls microphone audio.
-- "toggleVideo()" — Controls camera video.
-- "endCall()" — Terminates the call and releases local media resources.
+The "endCall()" function closes the current connection, stops local media tracks and resets the interface.
 
 ---
 
-🛠️ Technology Stack
+🛠️ Technologies Used
 
-FreeCall uses three core web development languages and the PeerJS library.
+The project uses three core programming languages.
 
-Technology| Purpose
-HTML5| Page structure and video elements
-CSS3| Styling, gradients, animations and responsive layout
-JavaScript| Application logic and call management
-PeerJS| Simplifies WebRTC peer connections
-WebRTC| Real-time audio and video communication
-STUN| Helps discover network connection paths
-GitHub Pages| Website hosting and deployment
+Technology| Usage
+HTML5| Application structure
+CSS3| Design, layout and animations
+JavaScript| Application logic and interactions
+PeerJS| Peer connection management
+WebRTC| Real-time audio/video communication
+STUN| Network discovery assistance
+GitHub Pages| Website hosting
 
-Programming Languages
+Programming Language Count
 
-Total core web languages: 3
+<details>
+<summary>View language details</summary>1. HTML5
 
-1. HTML
-2. CSS
+Used to create the application structure, buttons, input fields and video elements.
+
+2. CSS3
+
+Used for gradients, layouts, responsive styling, hover effects and transitions.
+
 3. JavaScript
+
+Used for PeerJS initialization, media access, event handling, calling and call controls.
+
+Total: 3 core web programming languages.
 
 PeerJS is a JavaScript library, not a separate programming language.
 
----
+</details>---
 
-🏗️ Project Architecture
+🖥️ User Interface
 
-FreeCall follows a lightweight single-page application architecture.
+FreeCall has two main interface sections.
 
-FreeCall/
-│
-├── index.html
-│   ├── HTML Structure
-│   ├── CSS Styling
-│   ├── Main Interface
-│   ├── Video Elements
-│   └── JavaScript Logic
-│
-└── README.md
-    └── Project Documentation
+Main Screen
 
-Architecture Explanation
+- Peer ID display.
+- Peer ID input field.
+- Connect Call button.
+- Connection status.
 
-Frontend Layer
+Active Call Screen
 
-Displays the user interface, Peer ID, input fields, call controls and video elements.
-
-Peer Connection Layer
-
-Uses PeerJS to initialize peers, handle signaling and manage calls.
-
-Media Layer
-
-Uses browser media APIs to access camera and microphone streams.
-
-Communication Layer
-
-Uses WebRTC to establish real-time peer-to-peer media communication.
+- Remote video display.
+- Local video preview.
+- Mute button.
+- Video control button.
+- End Call button.
+- Call status indicator.
 
 ---
 
-📖 How To Use FreeCall
+🚀 How To Use FreeCall
 
-Using FreeCall is simple.
+Follow these simple steps.
 
-👤 User 1 — Start the Application
+Step 1 — Open The Website
 
-1. Open the website.
-2. Wait for your Peer ID to generate.
-3. Click your Peer ID to copy it.
-4. Send that ID to your friend.
+Visit the FreeCall website in a supported modern browser.
 
-👤 User 2 — Connect to User 1
+Step 2 — Get Your Peer ID
 
-1. Open the same website.
-2. Wait for your own Peer ID to generate.
-3. Paste User 1's Peer ID into the input field.
-4. Click Connect Call.
-5. Allow camera and microphone permissions.
+Wait until your unique Peer ID appears.
 
-🎉 Start Communicating
+Step 3 — Share Your ID
 
-Once the connection is established:
+Click your Peer ID to copy it and send it to your friend.
 
-- See the other participant.
-- Talk through your microphone.
-- Mute or unmute your microphone.
-- Turn your camera on or off.
-- End the call whenever needed.
+Step 4 — Enter The Other Peer ID
 
-Important: Both users must have access to a compatible browser and an internet connection.
+Your friend can enter your Peer ID into the input field.
+
+Step 5 — Connect
+
+Click the Connect Call button.
+
+Step 6 — Allow Permissions
+
+Allow camera and microphone access when your browser asks.
+
+Step 7 — Start Calling
+
+Once the remote video stream arrives, you can communicate.
+
+Step 8 — Control Your Call
+
+Use the available controls:
+
+- Mute
+- Unmute
+- Video On/Off
+- End Call
 
 ---
 
-💻 Run Locally
+💻 Run The Project Locally
 
-Want to explore or modify the source code?
+You can run FreeCall on your computer without installing a complex development environment.
 
-Follow these steps.
+Requirements
 
-Prerequisites
-
-- A computer.
 - A modern web browser.
-- Git installed.
 - Internet connection.
+- Git (optional).
 
-1. Clone the Repository
+Clone Repository
 
 git clone https://github.com/abhay2832/freecall.git
 
-2. Open the Project Folder
+Open Project Folder
 
 cd freecall
 
-3. Run the Application
-
-Since this project uses a single HTML file, no Node.js backend or package installation is required for the current implementation.
-
-You can open "index.html" through a local development server.
-
-For example, using VS Code Live Server:
-
-1. Open the project folder in VS Code.
-2. Install the Live Server extension.
-3. Right-click "index.html".
-4. Select Open with Live Server.
-
-Alternatively, use Python:
+Run Using Python
 
 python -m http.server 8000
 
-Then open:
+Open the following address:
 
 http://localhost:8000
 
-For camera and microphone access, use HTTPS or a browser-recognized secure local development origin such as localhost.
+You can also open "index.html" using VS Code Live Server.
+
+Note: Camera and microphone access require HTTPS or a browser-recognized secure local origin such as localhost.
 
 ---
 
-🔐 Browser Permissions
+📂 Project Structure
 
-FreeCall requires browser permission to access:
+The current project uses a single-file architecture.
 
-- Camera
-- Microphone
+freecall/
+│
+└── index.html
+    │
+    ├── HTML Structure
+    ├── CSS Styling
+    ├── JavaScript Logic
+    ├── PeerJS Integration
+    ├── Video Elements
+    └── Call Controls
 
-If permission is denied, the application cannot capture the required media streams.
-
-To fix this:
-
-1. Open the website.
-2. Click the browser's site permissions icon.
-3. Allow camera access.
-4. Allow microphone access.
-5. Reload the page if necessary.
-
----
-
-🛡️ Privacy and Security
-
-FreeCall is designed around browser-based peer communication.
-
-Some important technical details:
-
-- Camera and microphone access require user permission.
-- The application does not implement a user account or registration system.
-- PeerJS handles connection signaling.
-- STUN servers assist with network discovery.
-- WebRTC carries the real-time media connection.
-- Network conditions and firewall restrictions can affect connectivity.
-
-Privacy Note: The current source code does not include a dedicated privacy policy, authentication system or self-hosted signaling server. Do not treat the application as a fully audited secure communication service. WebRTC normally protects media transport using encryption, but that does not by itself guarantee complete end-to-end privacy across every part of the service.
+All application code is currently contained in "index.html".
 
 ---
 
-🚀 Future Improvements
+🔐 Privacy & Permissions
 
-FreeCall has a simple foundation that can be expanded with more functionality.
+FreeCall requires camera and microphone permissions to provide video calling functionality.
 
-Possible future improvements include:
+Important details:
 
-- [ ] Text chat during calls.
-- [ ] Screen sharing.
+- Camera access requires user permission.
+- Microphone access requires user permission.
+- PeerJS manages signaling and peer connections.
+- WebRTC handles real-time media communication.
+- Google STUN servers are configured for network discovery.
+- The application does not implement account registration.
+
+WebRTC normally encrypts media transport. However, the project has not been independently security-audited and does not provide a complete privacy guarantee.
+
+---
+
+⚠️ Current Limitations
+
+The current version is intentionally lightweight.
+
+- Supports peer-to-peer calling rather than group calling.
+- Requires an internet connection.
+- Camera and microphone permissions are necessary.
+- Network and firewall restrictions can affect connectivity.
+- No dedicated TURN server is configured.
+- No text chat feature is implemented.
+- No user account system is implemented.
+
+---
+
+🔮 Future Improvements
+
+Possible features for future versions:
+
 - [ ] Group video calling.
-- [ ] Better connection error handling.
-- [ ] Camera selection.
-- [ ] Microphone selection.
+- [ ] Real-time text chat.
+- [ ] Screen sharing.
 - [ ] Call duration timer.
 - [ ] Incoming call notifications.
-- [ ] Improved mobile interface.
+- [ ] Camera selection.
+- [ ] Microphone selection.
 - [ ] Dark mode.
-- [ ] Custom room IDs.
-- [ ] Self-hosted signaling server.
-- [ ] Improved accessibility.
-- [ ] More robust network connectivity using TURN support.
+- [ ] Better mobile experience.
+- [ ] Improved connection handling.
+- [ ] TURN server support.
 
-These are ideas for future development, not features currently implemented.
-
----
-
-🧠 Challenges and Learning
-
-Building FreeCall provides practical exposure to several important web development concepts.
-
-What This Project Demonstrates
-
-WebRTC Fundamentals
-
-Understanding how real-time communication works inside modern browsers.
-
-Peer-to-Peer Communication
-
-Learning how two users can establish a direct media connection.
-
-JavaScript Event Handling
-
-Working with events such as peer initialization, incoming calls, streams and connection errors.
-
-Browser Media APIs
-
-Accessing and managing microphone and camera streams.
-
-DOM Manipulation
-
-Updating interface elements based on connection state.
-
-CSS Animations
-
-Creating smooth transitions and an interactive interface.
-
-Resource Management
-
-Stopping media tracks and closing connections when calls end.
+These are planned improvement ideas, not currently available features.
 
 ---
 
-👨‍💻 Developer
+🧠 What I Learned From This Project
 
-<div align="center"><img src="https://github.com/abhay2832.png" width="120" alt="Abhay GitHub Profile Picture" />Abhay
+Working on FreeCall provides practical experience with:
 
-Creator & Project Maintainer
-
-A developer interested in building practical web applications, exploring modern technologies and creating simple solutions to real-world problems.
-
-""GitHub" (https://img.shields.io/badge/GitHub-abhay2832-181717?style=for-the-badge&logo=github)" (https://github.com/abhay2832)
-
-""FreeCall Repository" (https://img.shields.io/badge/Project-FreeCall-blueviolet?style=for-the-badge)" (https://github.com/abhay2832/freecall)
-
-</div>Project Credits
-
-- Project Name: FreeCall
-- Project Creator / Repository Owner: Abhay
-- Development Approach: Single-page web application
-- Repository: abhay2832/freecall
-- Deployment: GitHub Pages
-
-The public repository identifies Abhay as its owner. The complete individual or team contribution history has not been established here, so the project is not being incorrectly labelled as exclusively solo-developed.
+- HTML, CSS and JavaScript.
+- PeerJS integration.
+- WebRTC fundamentals.
+- Browser media APIs.
+- Camera and microphone handling.
+- Real-time video streaming.
+- JavaScript events and callbacks.
+- DOM manipulation.
+- Connection lifecycle management.
+- Responsive web design.
 
 ---
 
-🤝 Contributing
+👨‍💻 Developer & Credits
 
-Contributions, suggestions and improvements are welcome.
+<div align="center"><img src="https://github.com/abhay2832.png" width="110" alt="Abhay GitHub Avatar" />Abhay
 
-If you want to contribute:
+Project Owner & Repository Maintainer
 
-1. Fork this repository.
-2. Create a new branch.
-3. Make your changes.
-4. Test your implementation.
-5. Submit a Pull Request.
+Interested in web development, practical applications and exploring modern web technologies.
 
-git checkout -b feature/new-feature
-git add .
-git commit -m "Add new feature"
-git push origin feature/new-feature
+GitHub Username: "@abhay2832"
+
+</div>Project Information
+
+Detail| Information
+Project| FreeCall
+Repository Owner| Abhay
+Project Type| Web Application
+Architecture| Single HTML File
+Core Languages| 3
+Main Library| PeerJS
+Communication| WebRTC
+Hosting| GitHub Pages
+Development Team| Not publicly specified
+
+---
+
+🤝 Contributions
+
+Suggestions and improvements are welcome.
+
+You can contribute by:
+
+1. Forking the repository.
+2. Creating a new branch.
+3. Making improvements.
+4. Testing your changes.
+5. Submitting a Pull Request.
 
 ---
 
 📜 License
 
-No license file is currently specified in the repository.
-
-Please contact the repository owner regarding permissions for reuse, modification or redistribution.
+No license file is currently specified in the repository. Please contact the repository owner for permission before redistributing or reusing the source code.
 
 ---
 
-<div align="center">⭐ Support FreeCall
+<div align="center">⭐ Support The Project
 
-If you like this project, consider giving it a star on GitHub!
+If you find FreeCall interesting, consider giving the repository a star.
 
-It helps the project gain visibility and encourages further development.
+Every bit of support motivates further development!
 
-📞 Try It Now
+📞 FreeCall
 
-""Open FreeCall" (https://img.shields.io/badge/LAUNCH%20FREECALL-667EEA?style=for-the-badge&logo=googlechrome&logoColor=white)" (https://abhay2832.github.io/freecall/)
-
-""View Source Code" (https://img.shields.io/badge/VIEW%20SOURCE%20CODE-181717?style=for-the-badge&logo=github&logoColor=white)" (https://github.com/abhay2832/freecall)
-
----
+Simple communication. Direct connection. Better accessibility.
 
 Made with ❤️ by Abhay
-
-Connecting people, one Peer ID at a time.
 
 </div>
